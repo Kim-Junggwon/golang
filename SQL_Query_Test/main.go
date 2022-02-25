@@ -1,62 +1,29 @@
 package main
 
 import (
-	"database/sql"
+	"board/db"
 	"fmt"
-	"os"
-
-	_ "github.com/mattn/go-sqlite3" // db
+	"time"
 )
 
-type Person struct {
-	Name string
-	Age  int
-}
-
-type Db *sql.DB
-
-func checkError(err error) {
-	if err != nil {
-		fmt.Println("Fatal Error : ", err.Error())
-		os.Exit(1)
-	}
-}
-
 func main() {
-	// db connect
-	Db, _ := sql.Open("sqlite3", "./test.db")
-	defer Db.Close()
+	const dbpath = "test2.db"
 
-	// create table
-	cmd := `CREATE TABLE IF NOT EXISTS person(
-		name STRING,
-		age INT)`
-	_, err := Db.Exec(cmd)
-	checkError(err)
+	d := db.InitDB(dbpath)
+	defer d.Close()
 
-	// insert data
-	cmd = "INSERT INTO person (name, age) VALUES (?, ?)"
-	_, err = Db.Exec(cmd, "Kim", 25)
-	checkError(err)
+	db.CreateTable(d)
 
-	// select data
-	cmd = "SELECT * FROM person"
-	rows, _ := Db.Query(cmd)
-	defer rows.Close()
+	items := []db.Item{
+		db.Item{"0", "T0", "N0", time.Now()},
+		db.Item{"1", "T1", "N1", time.Now()},
+	}
+	db.InsertItem(d, items)
 
-	var pp []Person
-	for rows.Next() {
-		var p Person
-		err = rows.Scan(&p.Name, &p.Age)
-		checkError(err)
-		pp = append(pp, p)
+	read := db.ReadItem(d)
+
+	for _, v := range read {
+		fmt.Println(v.Id, v.Name, v.Title, v.Date)
 	}
 
-	err = rows.Err()
-	checkError(err)
-
-	// Print data
-	for _, p := range pp {
-		fmt.Println(p.Name, p.Age)
-	}
 }
