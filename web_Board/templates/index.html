@@ -11,22 +11,24 @@
     <body>
         <div class="container mt-5">
             <h2>게시판</h2>
-            <table class="table">
+            <table class="table text-center">
                 <thead>
                     <tr>
-                        <th>번호</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>날짜</th>
+                        <th class="col-md-1">번호</th>
+                        <th class="col-md-6">제목</th>
+                        <th class="col-md-2">작성자</th>
+                        <th class="col-md-3">날짜</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {{range .}}
                     <tr>
-                        <td>{{.}}</td>
-                        <td>부트스트랩 테이블</td>
-                        <td>중곡동쌍도끼</td>
-                        <td>2022.02.16</td>
+                        <td>{{.Id}}</td>
+                        <td>{{.Title}}</td>
+                        <td>{{.Name}}</td>
+                        <td>{{.Date.Format "2006-01-02 15:04:05"}}</td>
                     </tr>
+                    {{end}}
                 </tbody> 
             </table>
             <div class="d-flex justify-content-between align-items-center">
@@ -51,4 +53,4 @@
             </div>
         </div>
     </body>
-    </html>
+</html>
