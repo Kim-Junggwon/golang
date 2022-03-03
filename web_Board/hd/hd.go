@@ -4,9 +4,9 @@ import (
 	"board/db"
 	"database/sql"
 	"fmt"
+	"html/template"
 	"net/http"
 	"os"
-	"text/template"
 
 	"github.com/gorilla/mux"
 )
@@ -21,19 +21,39 @@ func checkError(err error) {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.New("Hello").ParseFiles("templates/index.html")
-	checkError(err)
+	items := db.ReadItem(d)
 
-	tmpl.ExecuteTemplate(w, "index.html", "Test Msg")
+	tmpl, err := template.New("Index").ParseFiles("templates/index.html")
+	checkError(err)
+	err = tmpl.ExecuteTemplate(w, "index.html", items)
+	checkError(err)
 }
 
 func getListHandler(w http.ResponseWriter, r *http.Request) {
 	// template
+	tmpl, err := template.New("Write").ParseFiles("templates/write.html")
+	checkError(err)
+	err = tmpl.ExecuteTemplate(w, "write.html", "test")
+	checkError(err)
 }
 
 func postListHandler(w http.ResponseWriter, r *http.Request) {
-	// submit button event
+	db.CreateTable(d)
 
+	tmpl, err := template.New("Write").ParseFiles("templates/write.html")
+	checkError(err)
+	err = tmpl.ExecuteTemplate(w, "write.html", "test")
+	checkError(err)
+
+	new := db.Item{
+		Title:   r.FormValue("title"),
+		Name:    r.FormValue("name"),
+		Content: r.FormValue("content"),
+	}
+
+	db.InsertItem(d, new)
+	// 완료 후 인덱스 페이지로 이동..
+	// http.Redirect(w, r, "/", http.StatusOK) / responsewriter 2 번 호출 오류,..
 }
 
 func pageHandler(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +62,8 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 
 func Handler(dbpath string) http.Handler {
 	d = db.InitDB(dbpath)
-	defer d.Close()
+	db.CreateTable(d)
+	// defer d.Close()
 
 	mux := mux.NewRouter()
 
