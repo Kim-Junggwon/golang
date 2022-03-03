@@ -10,7 +10,7 @@ import (
 )
 
 type Item struct {
-	Id      string
+	Id      int
 	Title   string
 	Name    string
 	Date    time.Time
@@ -37,7 +37,7 @@ func InitDB(filepath string) *sql.DB {
 func CreateTable(db *sql.DB) {
 	sql_table := `
 	CREATE TABLE IF NOT EXISTS list(
-		Id TEXT NOT NULL PRIMARY KEY,
+		Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 		Title TEXT,
 		Name TEXT,
 		Date DATETIME,
@@ -49,17 +49,15 @@ func CreateTable(db *sql.DB) {
 	checkError(err)
 }
 
-func InsertItem(db *sql.DB, items []Item) {
-	sql_addItem := "INSERT OR REPLACE INTO list(Id, Title, Name, Date, Content) VALUES (?, ?, ?, ?, ?);"
+func InsertItem(db *sql.DB, item Item) {
+	sql_addItem := "INSERT OR REPLACE INTO list(Title, Name, Date, Content) VALUES (?, ?, ?, ?);"
 
 	stmt, err := db.Prepare(sql_addItem)
 	checkError(err)
 	defer stmt.Close()
 
-	for _, item := range items {
-		_, err2 := stmt.Exec(item.Id, item.Title, item.Name, item.Date, item.Content)
-		checkError(err2)
-	}
+	_, err2 := stmt.Exec(item.Title, item.Name, time.Now(), item.Content)
+	checkError(err2)
 }
 
 func ReadItem(db *sql.DB) []Item {
