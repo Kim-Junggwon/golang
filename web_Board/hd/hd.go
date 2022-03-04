@@ -4,9 +4,10 @@ import (
 	"board/db"
 	"database/sql"
 	"fmt"
-	"html/template"
 	"net/http"
 	"os"
+	"strings"
+	"text/template"
 
 	"github.com/gorilla/mux"
 )
@@ -30,20 +31,14 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getListHandler(w http.ResponseWriter, r *http.Request) {
-	// template
 	tmpl, err := template.New("Write").ParseFiles("templates/write.html")
 	checkError(err)
-	err = tmpl.ExecuteTemplate(w, "write.html", "test")
+	err = tmpl.ExecuteTemplate(w, "write.html", "")
 	checkError(err)
 }
 
 func postListHandler(w http.ResponseWriter, r *http.Request) {
-	db.CreateTable(d)
-
-	tmpl, err := template.New("Write").ParseFiles("templates/write.html")
-	checkError(err)
-	err = tmpl.ExecuteTemplate(w, "write.html", "test")
-	checkError(err)
+	db.CreateTable(d) // table이 없을 경우 생성
 
 	new := db.Item{
 		Title:   r.FormValue("title"),
@@ -52,12 +47,27 @@ func postListHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db.InsertItem(d, new)
-	// 완료 후 인덱스 페이지로 이동..
-	// http.Redirect(w, r, "/", http.StatusOK) / responsewriter 2 번 호출 오류,..
+	http.Redirect(w, r, "/", http.StatusPermanentRedirect)
 }
 
-func pageHandler(w http.ResponseWriter, r *http.Request) {
-	// row 별 페이지
+func pageGetHandler(w http.ResponseWriter, r *http.Request) {
+	id := strings.TrimLeft(r.URL.Path, "/page")
+	item := db.ReadPage(d, id)
+
+	item.Content = strings.Replace(item.Content, "\n", "<br>", -1) // -1: 모든 문자
+
+	tmpl, err := template.New("Page").ParseFiles("templates/page.html")
+	checkError(err)
+	err = tmpl.ExecuteTemplate(w, "page.html", item)
+	checkError(err)
+}
+
+func pageUpdateHandler(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func pageDeleteHandler(w http.ResponseWriter, r *http.Request) {
+
 }
 
 func Handler(dbpath string) http.Handler {
@@ -68,7 +78,9 @@ func Handler(dbpath string) http.Handler {
 	mux := mux.NewRouter()
 
 	mux.HandleFunc("/", indexHandler)
-	mux.HandleFunc("/{id:[0-9]+}", pageHandler).Methods("GET")
+	mux.HandleFunc("/page/{id:[0-9]+}", pageGetHandler).Methods("GET")
+	mux.HandleFunc("/page/{id:[0-9]+}", pageUpdateHandler).Methods("UPDATE")
+	mux.HandleFunc("/page/{id:[0-9]+}", pageDeleteHandler).Methods("DELETE")
 
 	mux.HandleFunc("/write", getListHandler).Methods("GET")
 	mux.HandleFunc("/write", postListHandler).Methods("POST")
