@@ -7,26 +7,31 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         
         <title>Go 게시판</title>
+        <style>
+            #title { cursor: pointer; }
+        </style>
     </head>
     <body>
         <div class="container mt-5">
             <h2>게시판</h2>
-            <table class="table text-center">
+            <table class="table text-center table-hover">
                 <thead>
                     <tr>
-                        <th class="col-md-1">번호</th>
+                        <th class="col-md-1">글번호</th>
                         <th class="col-md-6">제목</th>
                         <th class="col-md-2">작성자</th>
-                        <th class="col-md-3">날짜</th>
+                        <th class="col-md-3">작성 시간</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{range .}}
                     <tr>
                         <td>{{.Id}}</td>
-                        <td>{{.Title}}</td>
+                        <td>
+                            <span id="title" onclick="location.href=`/page/{{.Id}}`">{{.Title}}</span>
+                        </td>
                         <td>{{.Name}}</td>
-                        <td>{{.Date.Format "2006-01-02 15:04:05"}}</td>
+                        <td>{{.Date.Format "15:04 / 1.2"}}</td>
                     </tr>
                     {{end}}
                 </tbody> 
