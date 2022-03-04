@@ -69,7 +69,7 @@ func ReadItem(db *sql.DB) []Item {
 	result := []Item{}
 
 	for rows.Next() {
-		var item Item // item := Item{}
+		item := Item{}
 		err2 := rows.Scan(&item.Id, &item.Title, &item.Name, &item.Date, &item.Content)
 		checkError(err2)
 
@@ -77,4 +77,15 @@ func ReadItem(db *sql.DB) []Item {
 	}
 
 	return result
+}
+
+func ReadPage(db *sql.DB, id string) Item {
+	page := Item{}
+
+	sql_read := "SELECT * FROM LIST WHERE Id=" + id
+
+	err := db.QueryRow(sql_read).Scan(&page.Id, &page.Title, &page.Name, &page.Date, &page.Content)
+	checkError(err)
+
+	return page
 }
