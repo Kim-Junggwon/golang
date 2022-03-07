@@ -19,7 +19,7 @@ type Item struct {
 
 func checkError(err error) {
 	if err != nil {
-		fmt.Println("Fatal error", err.Error())
+		fmt.Println("[Fatal error]", err.Error())
 		os.Exit(1)
 	}
 }
@@ -60,8 +60,8 @@ func InsertItem(db *sql.DB, item Item) {
 	checkError(err2)
 }
 
-func ReadItem(db *sql.DB) []Item {
-	sql_readall := "SELECT * FROM list ORDER BY Date DESC;"
+func ReadItems(db *sql.DB) []Item {
+	sql_readall := "SELECT * FROM list ORDER BY Id DESC;"
 
 	rows, err := db.Query(sql_readall)
 	checkError(err)
@@ -82,10 +82,21 @@ func ReadItem(db *sql.DB) []Item {
 func ReadPage(db *sql.DB, id string) Item {
 	page := Item{}
 
-	sql_read := "SELECT * FROM LIST WHERE Id=" + id
+	sql_read := "SELECT * FROM list WHERE Id=" + id
 
 	err := db.QueryRow(sql_read).Scan(&page.Id, &page.Title, &page.Name, &page.Date, &page.Content)
 	checkError(err)
 
 	return page
+}
+
+func UpdateContent(db *sql.DB, id string, content string) {
+	sql_update := "UPDATE list SET Content=?, Date=? where Id=?"
+
+	stmt, err := db.Prepare(sql_update)
+	checkError(err)
+	defer stmt.Close()
+
+	_, err2 := stmt.Exec(content, time.Now(), id)
+	checkError(err2)
 }
