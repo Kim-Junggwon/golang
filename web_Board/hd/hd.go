@@ -16,13 +16,14 @@ var d *sql.DB
 
 func checkError(err error) {
 	if err != nil {
-		fmt.Println("Fatal error", err.Error())
+		fmt.Println("Fatal error : ", err.Error())
 		os.Exit(1)
 	}
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	items := db.ReadItem(d)
+	items := db.ReadItems(d)
+	db.CreateTable(d) // table이 없을 경우 생성
 
 	tmpl, err := template.New("Index").ParseFiles("templates/index.html")
 	checkError(err)
@@ -38,8 +39,6 @@ func getListHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func postListHandler(w http.ResponseWriter, r *http.Request) {
-	db.CreateTable(d) // table이 없을 경우 생성
-
 	new := db.Item{
 		Title:   r.FormValue("title"),
 		Name:    r.FormValue("name"),
@@ -62,13 +61,29 @@ func pageGetHandler(w http.ResponseWriter, r *http.Request) {
 	checkError(err)
 }
 
-func pageUpdateHandler(w http.ResponseWriter, r *http.Request) {
+func modifyGetHandler(w http.ResponseWriter, r *http.Request) {
+	id := strings.TrimLeft(r.URL.Path, "/modify")
+	item := db.ReadPage(d, id)
 
+	tmpl, err := template.New("Modify").ParseFiles("templates/modify.html")
+	checkError(err)
+	err = tmpl.ExecuteTemplate(w, "modify.html", item)
+	checkError(err)
 }
 
-func pageDeleteHandler(w http.ResponseWriter, r *http.Request) {
+func modifyUpdateHandler(w http.ResponseWriter, r *http.Request) {
+	id := strings.TrimLeft(r.URL.Path, "/modify")
+	content := r.FormValue("content")
 
+	db.UpdateContent(d, id, content)
+
+	http.Redirect(w, r, "/", http.StatusPermanentRedirect)
+	// 수정 시간 추가
 }
+
+/* func pageDeleteHandler(w http.ResponseWriter, r *http.Request) {
+
+} */
 
 func Handler(dbpath string) http.Handler {
 	d = db.InitDB(dbpath)
@@ -79,8 +94,10 @@ func Handler(dbpath string) http.Handler {
 
 	mux.HandleFunc("/", indexHandler)
 	mux.HandleFunc("/page/{id:[0-9]+}", pageGetHandler).Methods("GET")
-	mux.HandleFunc("/page/{id:[0-9]+}", pageUpdateHandler).Methods("UPDATE")
-	mux.HandleFunc("/page/{id:[0-9]+}", pageDeleteHandler).Methods("DELETE")
+
+	mux.HandleFunc("/modify/{id:[0-9]+}", modifyGetHandler).Methods("GET")
+	mux.HandleFunc("/modify/{id:[0-9]+}", modifyUpdateHandler).Methods("POST")
+	// mux.HandleFunc("/page/{id:[0-9]+}", pageDeleteHandler).Methods("DELETE")
 
 	mux.HandleFunc("/write", getListHandler).Methods("GET")
 	mux.HandleFunc("/write", postListHandler).Methods("POST")
