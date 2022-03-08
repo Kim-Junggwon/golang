@@ -25,3 +25,6 @@
   - write.html : 게시물 작성 페이지 "/write" 템플릿
 
 
+## 동작 예시
+게시물 작성
+![image](https://user-images.githubusercontent.com/94525599/157185990-d2351662-7287-4f6f-9982-8ababcc8fc9a.png)
