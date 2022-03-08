@@ -25,7 +25,13 @@
   - write.html : 게시물 작성 페이지 "/write" 템플릿
 
 
-## 동작 예시
-__게시물 작성__  
-![ezgif com-gif-maker](https://user-images.githubusercontent.com/94525599/157186382-55e2bf04-7661-4d4e-8f43-1cc7f65d801f.gif)
+## 동작 예시  
 
+__게시물 작성__  
+![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/94525599/157187002-447c5bbc-2c6d-4092-ba6e-a06f20b2fe26.gif)  
+
+__게시물 수정__  
+![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/94525599/157187233-17d9d728-7bc9-4391-b8b1-faf451570cb8.gif)  
+
+__게시물 삭제__
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/94525599/157187409-8e91bb24-28b1-4b4c-882a-c56da0471e00.gif)
