@@ -16,21 +16,21 @@ database/sql 패키지가 지원하는 SQL 종류와 각각의 Driver
 ```go
 func Open(driverName, dataSourceName string) (*DB, error)
 ```
-사용 할 DB 드라이버와 해당 DB의 연결 정보를 매개변수로 입력하면, sql.DB 객체를 리턴 시킴  
-리턴 받은 sql.DB 객체를 통해 쿼리문을 실행할 수 있음  
-실제 DB Connection은 Query 등과 같이 실제 DB 연결이 필요한 시점에만 이루어지게 됨  
+- 사용 할 DB 드라이버와 해당 DB의 연결 정보를 매개변수로 입력하면, sql.DB 객체를 리턴 시킴  
+- 리턴 받은 sql.DB 객체를 통해 쿼리문을 실행할 수 있음  
+- 실제 DB Connection은 Query 등과 같이 실제 DB 연결이 필요한 시점에만 이루어지게 됨  
 
 ```go
 func (db *DB) QueryRow(query string, args ...interface{}) *Row
 func (db *DB) Query(query string, args ...interface{}) (*Rows, error)
 ```
-데이터베이스 조회(SELECT) 시 두 개의 함수를 사용 할 수 있음  
-QueryRow()  
-- 하나의 Row만 리턴할 경우 혹은 하나의 Row만 리턴이 될 것을 예상한 경우  
-Query()  
-- 복수 개의 Row를 리턴할 경우  
-하나의 Row에서 실제 데이터를 읽어 로컬 변수에 할당하기 위해선 Scan() 메소드를 사용  
-복수 Row에서 다음 Row로 이동하기 위해 Next() 메소드를 사용  
+- 데이터베이스 조회(SELECT) 시 두 개의 함수를 사용 할 수 있음  
+- QueryRow()  
+  - 하나의 Row만 리턴할 경우 혹은 하나의 Row만 리턴이 될 것을 예상한 경우  
+- Query()  
+  - 복수 개의 Row를 리턴할 경우  
+- 하나의 Row에서 실제 데이터를 읽어 로컬 변수에 할당하기 위해선 Scan() 메소드를 사용  
+- 복수 Row에서 다음 Row로 이동하기 위해 Next() 메소드를 사용  
   
 ```go
 func (db *DB) Exec(query string, args ...interface{}) (Result, error)
