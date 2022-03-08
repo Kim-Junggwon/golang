@@ -19,7 +19,7 @@ func Open(driverName, dataSourceName string) (*DB, error)
 - 사용 할 DB 드라이버와 해당 DB의 연결 정보를 매개변수로 입력하면, sql.DB 객체를 리턴 시킴  
 - 리턴 받은 sql.DB 객체를 통해 쿼리문을 실행할 수 있음  
 - 실제 DB Connection은 Query 등과 같이 실제 DB 연결이 필요한 시점에만 이루어지게 됨  
-
+---
 
 ```go
 func (db *DB) QueryRow(query string, args ...interface{}) *Row
@@ -32,14 +32,14 @@ func (db *DB) Query(query string, args ...interface{}) (*Rows, error)
   - 복수 개의 Row를 리턴할 경우  
 - 하나의 Row에서 실제 데이터를 읽어 로컬 변수에 할당하기 위해선 Scan() 메소드를 사용  
 - 복수 Row에서 다음 Row로 이동하기 위해 Next() 메소드를 사용  
-  
+---
 
 ```go
 func (db *DB) Exec(query string, args ...interface{}) (Result, error)
 ```
 - SELECT를 제외한 DML(INSERT. UPDATE, DELETEE) 명령을 하기 위해서 sql.DB 객체의 Exec() 메소드를 사용
 - 리턴되는 데이터가 있는 경우 Exec() 메소드를 사용해야 함
-
+---
 
 ```go
 func (db *DB) Prepare(query string) (*Stmt, error)
