@@ -100,3 +100,10 @@ func UpdateContent(db *sql.DB, id string, content string) {
 	_, err2 := stmt.Exec(content, time.Now(), id)
 	checkError(err2)
 }
+
+func DeletePage(db *sql.DB, id string) {
+	sql_delete := "DELETE FROM list WHERE Id=" + id
+
+	_, err := db.Exec(sql_delete)
+	checkError(err)
+}
