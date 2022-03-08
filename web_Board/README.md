@@ -11,7 +11,6 @@
 ```base
 D:\GO
 |   go.mod
-|   main.exe
 |   main.go : 구현된 핸들러를 호출하여 서버 실행
 |   test.db : 데이터베이스 파일
 |
