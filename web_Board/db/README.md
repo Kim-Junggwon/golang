@@ -12,8 +12,11 @@ database/sql 패키지가 지원하는 SQL 종류와 각각의 Driver
 - SQLite: https://github.com/mattn/go-sqlite3
 - DB2: https://bitbucket.org/phiggins/db2cli
 
-
-
+## Function
+```go
+func Open(driverName, dataSourceName string) (*DB, error)
+```
+: 오픈
 
 참고  
 https://brownbears.tistory.com/186
