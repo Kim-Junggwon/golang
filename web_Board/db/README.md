@@ -13,7 +13,7 @@ database/sql 패키지가 지원하는 SQL 종류와 각각의 Driver
 - DB2: https://bitbucket.org/phiggins/db2cli
 
 ## 주요 Function
-<br>
+
 ```go
 func Open(driverName, dataSourceName string) (*DB, error)
 ```
