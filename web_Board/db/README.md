@@ -48,9 +48,9 @@ func (db *DB) Exec(query string, args ...interface{}) (Result, error)
 ```
 SELECT를 제외한 DML(INSERT. UPDATE, DELETEE) 명령을 하기 위해서 sql.DB 객체의 Exec() 메소드를 사용
 
-리턴되는 데이터가 있는 경우 Exec() 메소드를 사용해야 함
+리턴되는 데이터가 있는 경우 Exec() 메소드를 사용해야 함  
 <br>
-
+  
 
 ```go
 func (db *DB) Prepare(query string) (*Stmt, error)
