@@ -24,6 +24,7 @@ func Open(driverName, dataSourceName string) (*DB, error)
 실제 DB Connection은 Query 등과 같이 실제 DB 연결이 필요한 시점에만 이루어지게 됨  
 <br>
 
+
 ```go
 func (db *DB) QueryRow(query string, args ...interface{}) *Row
 func (db *DB) Query(query string, args ...interface{}) (*Rows, error)
@@ -41,6 +42,7 @@ Query()
 복수 Row에서 다음 Row로 이동하기 위해 Next() 메소드를 사용  
 <br>
 
+
 ```go
 func (db *DB) Exec(query string, args ...interface{}) (Result, error)
 ```
@@ -48,6 +50,7 @@ SELECT를 제외한 DML(INSERT. UPDATE, DELETEE) 명령을 하기 위해서 sql.
 
 리턴되는 데이터가 있는 경우 Exec() 메소드를 사용해야 함
 <br>
+
 
 ```go
 func (db *DB) Prepare(query string) (*Stmt, error)
