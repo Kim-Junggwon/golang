@@ -1,4 +1,4 @@
-# Database 연동 코드
+# Database 연동
 
 ## Package
 sql 데이터베이스를 사용하기 위해 표준 패키지 database/sql을 사용
@@ -24,7 +24,7 @@ func Open(driverName, dataSourceName string) (*DB, error)
 func (db *DB) QueryRow(query string, args ...interface{}) *Row
 func (db *DB) Query(query string, args ...interface{}) (*Rows, error)
 ```
-- 데이터베이스 조회 시 두 개의 함수를 사용 할 수 있음
+- 데이터베이스 조회(SELECT) 시 두 개의 함수를 사용 할 수 있음
 - QueryRow()
   - 하나의 Row만 리턴할 경우 혹은 하나의 Row만 리턴이 될 것을 예상한 경우
 - Query()
@@ -32,7 +32,10 @@ func (db *DB) Query(query string, args ...interface{}) (*Rows, error)
 - 하나의 Row에서 실제 데이터를 읽어 로컬 변수에 할당하기 위해선 Scan() 메소드를 사용
 - 복수 Row에서 다음 Row로 이동하기 위해 Next() 메소드를 사용
   
-  
+```go
+func (db *DB) Exec(query string, args ...interface{}) (Result, error)
+```
+
   
   
 참고  
