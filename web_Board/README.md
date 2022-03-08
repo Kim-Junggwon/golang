@@ -26,6 +26,6 @@
 
 
 ## 동작 예시
-__게시물 작성__
+__게시물 작성__  
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/94525599/157186382-55e2bf04-7661-4d4e-8f43-1cc7f65d801f.gif)
 
