@@ -31,14 +31,14 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	checkError(err)
 }
 
-func getListHandler(w http.ResponseWriter, r *http.Request) {
+func writeGetHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.New("Write").ParseFiles("templates/write.html")
 	checkError(err)
 	err = tmpl.ExecuteTemplate(w, "write.html", "")
 	checkError(err)
 }
 
-func postListHandler(w http.ResponseWriter, r *http.Request) {
+func writePostHandler(w http.ResponseWriter, r *http.Request) {
 	new := db.Item{
 		Title:   r.FormValue("title"),
 		Name:    r.FormValue("name"),
@@ -78,12 +78,15 @@ func modifyUpdateHandler(w http.ResponseWriter, r *http.Request) {
 	db.UpdateContent(d, id, content)
 
 	http.Redirect(w, r, "/", http.StatusPermanentRedirect)
-	// 수정 시간 추가
 }
 
-/* func pageDeleteHandler(w http.ResponseWriter, r *http.Request) {
+func pageDeleteHandler(w http.ResponseWriter, r *http.Request) {
+	id := strings.TrimLeft(r.URL.Path, "/del")
 
-} */
+	db.DeletePage(d, id)
+
+	http.Redirect(w, r, "/", http.StatusPermanentRedirect)
+}
 
 func Handler(dbpath string) http.Handler {
 	d = db.InitDB(dbpath)
@@ -96,11 +99,11 @@ func Handler(dbpath string) http.Handler {
 	mux.HandleFunc("/page/{id:[0-9]+}", pageGetHandler).Methods("GET")
 
 	mux.HandleFunc("/modify/{id:[0-9]+}", modifyGetHandler).Methods("GET")
-	mux.HandleFunc("/modify/{id:[0-9]+}", modifyUpdateHandler).Methods("POST")
-	// mux.HandleFunc("/page/{id:[0-9]+}", pageDeleteHandler).Methods("DELETE")
+	mux.HandleFunc("/modify/{id:[0-9]+}", modifyUpdateHandler).Methods("POST") // 게시물 수정
+	mux.HandleFunc("/del/{id:[0-9]+}", pageDeleteHandler).Methods("GET")       // 게시물 삭제
 
-	mux.HandleFunc("/write", getListHandler).Methods("GET")
-	mux.HandleFunc("/write", postListHandler).Methods("POST")
+	mux.HandleFunc("/write", writeGetHandler).Methods("GET")
+	mux.HandleFunc("/write", writePostHandler).Methods("POST")
 
 	return mux
 }
