@@ -16,9 +16,9 @@ database/sql 패키지가 지원하는 SQL 종류와 각각의 Driver
 ```go
 func Open(driverName, dataSourceName string) (*DB, error)
 ```
-- 사용 할 DB 드라이버와 해당 DB의 연결 정보를 매개변수로 입력하면, sql.DB 객체를 리턴 시킴  
-- 리턴 받은 sql.DB 객체를 통해 쿼리문을 실행할 수 있음  
-- 실제 DB Connection은 Query 등과 같이 실제 DB 연결이 필요한 시점에만 이루어지게 됨  
+사용 할 DB 드라이버와 해당 DB의 연결 정보를 매개변수로 입력하면, sql.DB 객체를 리턴 시킴  
+리턴 받은 sql.DB 객체를 통해 쿼리문을 실행할 수 있음  
+실제 DB Connection은 Query 등과 같이 실제 DB 연결이 필요한 시점에만 이루어지게 됨  
 ---
 
 ```go
